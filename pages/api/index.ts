@@ -6,7 +6,7 @@ import {
   redirect,
 } from 'prismy'
 import { methodRouter } from 'prismy-method-router'
-import Post from '../../lib/models/Post'
+import PostModel from '../../lib/models/Post'
 
 const withErrorHandler = createWithErrorHandler({ dev: true, json: true })
 const bodySelector: SyncSelector<any> = (context) => {
@@ -17,7 +17,7 @@ export default methodRouter({
   get: prismy(
     [],
     async () => {
-      const posts = await Post.findAll({})
+      const posts = await PostModel.findAll({})
       console.log(posts)
       return res(
         [
@@ -43,10 +43,12 @@ export default methodRouter({
   post: prismy(
     [bodySelector],
     async (body) => {
-      await Post.create({
+      const post = await PostModel.create({
         title: body.title,
         content: body.content,
       })
+      console.log(post._attributes.title)
+
       return redirect('/api')
     },
     [withErrorHandler]

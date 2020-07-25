@@ -1,9 +1,24 @@
-import { DataTypes, Model } from 'sequelize'
+import { DataTypes, Model, Optional } from 'sequelize'
 import sequelize from '../sequelize'
+import { fixSequelizeModel } from '../db'
 
-class Post extends Model {
+interface PostAttributes {
   title: string
   content: string
+}
+
+class Post extends Model<PostAttributes> implements PostAttributes {
+  constructor(...args: any[]) {
+    super(...args)
+    fixSequelizeModel(new.target, this)
+  }
+
+  title: string
+  content: string
+
+  readonly id: number
+  readonly createdAt: Date
+  readonly updatedAt: Date
 }
 
 Post.init(
