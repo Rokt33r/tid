@@ -47,7 +47,6 @@ export default methodRouter({
         title: body.title,
         content: body.content,
       })
-      console.log(post._attributes.title)
 
       return redirect('/api')
     },
