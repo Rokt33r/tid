@@ -4,10 +4,14 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "next",
-    "build": "next build"
+    "dev": "npm run syncDb && next",
+    "build": "next build",
+    "syncDb": "ts-node -P tsconfig.node.json scripts/syncDb.ts"
   },
   "dependencies": {
+    "got": "^11.5.1",
+    "ky": "^0.23.0",
+    "ky-universal": "^0.8.1",
     "micro": "^9.3.4",
     "next": "^9.4.4",
     "pg": "^8.3.0",
@@ -23,6 +27,7 @@
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
     "prettier": "^2.0.5",
+    "ts-node": "^8.10.2",
     "type-fest": "^0.16.0",
     "typescript": "^3.9.7"
   }
