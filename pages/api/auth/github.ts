@@ -2,13 +2,17 @@ import { prismy, res, createWithErrorHandler, querySelector } from 'prismy'
 import { methodRouter } from 'prismy-method-router'
 import got from 'got'
 import User from '../../../lib/models/User'
+import {
+  sessionMiddleware,
+  sessionSelector,
+} from '../../../lib/selectors/sessionSelector'
 
 const withErrorHandler = createWithErrorHandler({ dev: true, json: true })
 
 export default methodRouter({
   get: prismy(
-    [querySelector],
-    async (query) => {
+    [querySelector, sessionSelector],
+    async (query, session) => {
       const { code } = query
 
       const { access_token } = await got(
@@ -48,11 +52,15 @@ export default methodRouter({
         user.githubToken = access_token
         await user.save()
       }
+      session.data = {
+        ...session.data,
+        userId: user.id,
+      }
 
       return res({
         user,
       })
     },
-    [withErrorHandler]
+    [withErrorHandler, sessionMiddleware]
   ),
 })

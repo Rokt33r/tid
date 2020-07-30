@@ -3,12 +3,16 @@ import sequelize from '../sequelize'
 import { fixSequelizeModel } from '../db'
 
 interface UserAttributes {
+  id: number
   name: string
   githubToken: string
   githubId: string
 }
 
-class User extends Model<UserAttributes> implements UserAttributes {
+interface UserCreationAttributes extends Omit<UserAttributes, 'id'> {}
+
+class User extends Model<UserAttributes, UserCreationAttributes>
+  implements UserAttributes {
   constructor(...args: any[]) {
     super(...args)
     fixSequelizeModel(new.target, this)
@@ -25,6 +29,11 @@ class User extends Model<UserAttributes> implements UserAttributes {
 
 User.init(
   {
+    id: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
+    },
     name: {
       type: DataTypes.STRING,
       allowNull: false,

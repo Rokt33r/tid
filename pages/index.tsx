@@ -1,5 +1,5 @@
 import React from 'react'
-import { NextPage } from 'next'
+import { NextPage, GetStaticProps, GetServerSideProps } from 'next'
 import ky from 'ky-universal'
 
 const HomePage = ({ data }: { data: any }) => {
@@ -13,8 +13,13 @@ const HomePage = ({ data }: { data: any }) => {
     </div>
   )
 }
-export async function getStaticProps() {
-  const data = await ky('http://localhost:3000/api').json()
+
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const data = await ky('http://localhost:3000/api', {
+    headers: {
+      cookie: context.req.headers.cookie,
+    },
+  }).json()
   return {
     props: { data },
   }
