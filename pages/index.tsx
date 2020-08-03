@@ -1,6 +1,6 @@
 import React from 'react'
-import { NextPage, GetStaticProps, GetServerSideProps } from 'next'
-import ky from 'ky-universal'
+import { GetServerSideProps } from 'next'
+import got from 'got'
 
 const HomePage = ({ data }: { data: any }) => {
   return (
@@ -15,7 +15,7 @@ const HomePage = ({ data }: { data: any }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const data = await ky('http://localhost:3000/api', {
+  const data = await got('http://localhost:3000/api', {
     headers: {
       cookie: context.req.headers.cookie,
     },
