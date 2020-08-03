@@ -61,6 +61,6 @@ export default methodRouter({
         user,
       })
     },
-    [withErrorHandler, sessionMiddleware]
+    [sessionMiddleware, withErrorHandler]
   ),
 })

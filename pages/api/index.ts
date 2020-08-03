@@ -29,7 +29,7 @@ export default methodRouter({
         user,
       })
     },
-    [withErrorHandler, sessionMiddleware]
+    [sessionMiddleware, withErrorHandler]
   ),
   post: prismy(
     [bodySelector],
