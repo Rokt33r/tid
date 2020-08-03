@@ -1,11 +1,13 @@
-import { prismy, res, createWithErrorHandler, querySelector } from 'prismy'
+import { prismy, createWithErrorHandler, querySelector, redirect } from 'prismy'
 import { methodRouter } from 'prismy-method-router'
-import got from 'got'
 import User from '../../../lib/models/User'
 import {
   sessionMiddleware,
   sessionSelector,
 } from '../../../lib/selectors/sessionSelector'
+import { Octokit } from '@octokit/rest'
+import { createOAuthAppAuth } from '@octokit/auth-oauth-app'
+import { TokenAuthentication } from '@octokit/auth-oauth-app/dist-types/types'
 
 const withErrorHandler = createWithErrorHandler({ dev: true, json: true })
 
@@ -15,25 +17,23 @@ export default methodRouter({
     async (query, session) => {
       const { code } = query
 
-      const { access_token } = await got(
-        'https://github.com/login/oauth/access_token',
-        {
-          searchParams: {
-            client_id: '28d9036cc07644ae74c3',
-            client_secret: '6856bd87bb2afb9c82eccaf64dfb03e0728ee433',
-            code: code as string,
-          },
-        }
-      ).json()
+      const auth = createOAuthAppAuth({
+        clientId: '28d9036cc07644ae74c3',
+        clientSecret: '6856bd87bb2afb9c82eccaf64dfb03e0728ee433',
+        code: code as string,
+      })
+      const appAuthentication = await auth({
+        type: 'token',
+      })
+      const token = (appAuthentication as TokenAuthentication).token
 
-      const githubUser = await got('https://api.github.com/user', {
-        headers: {
-          Accept: 'application/vnd.github.v3+json',
-          Authorization: `token ${access_token}`,
-        },
-      }).json()
+      const octokit = new Octokit({
+        auth: token,
+      })
 
-      const { login: userName, id: githubId } = githubUser as any
+      const githubUser = await octokit.users.getAuthenticated()
+
+      const { login: userName, id: githubId } = githubUser.data
 
       let user = await User.findOne({
         where: {
@@ -45,11 +45,11 @@ export default methodRouter({
         user = await User.create({
           name: userName,
           githubId,
-          githubToken: access_token,
+          githubToken: token,
         })
       } else {
         user.name = userName
-        user.githubToken = access_token
+        user.githubToken = token
         await user.save()
       }
       session.data = {
@@ -57,9 +57,7 @@ export default methodRouter({
         userId: user.id,
       }
 
-      return res({
-        user,
-      })
+      return redirect('/')
     },
     [sessionMiddleware, withErrorHandler]
   ),
