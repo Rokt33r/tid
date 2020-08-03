@@ -1,6 +1,6 @@
 import { prismy, createWithErrorHandler, querySelector, redirect } from 'prismy'
 import { methodRouter } from 'prismy-method-router'
-import User from '../../../lib/models/User'
+import { User, GithubUserProfile } from '../../../lib/models'
 import {
   sessionMiddleware,
   sessionSelector,
@@ -35,22 +35,33 @@ export default methodRouter({
 
       const { login: userName, id: githubId } = githubUser.data
 
-      let user = await User.findOne({
+      let githubUserProfile = await GithubUserProfile.findOne({
         where: {
           githubId: githubId.toString(),
         },
       })
+      let user: User
 
-      if (user == null) {
+      if (githubUserProfile == null) {
         user = await User.create({
           name: userName,
+        })
+
+        githubUserProfile = await GithubUserProfile.create({
           githubId,
           githubToken: token,
+          UserId: user.id,
         })
       } else {
+        user = await User.findOne({
+          where: {
+            id: githubUserProfile.UserId,
+          },
+        })
         user.name = userName
-        user.githubToken = token
         await user.save()
+        githubUserProfile.githubToken = token
+        await githubUserProfile.save()
       }
       session.data = {
         ...session.data,

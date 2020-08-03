@@ -1,12 +1,11 @@
 import { prismy, res, createWithErrorHandler, redirect } from 'prismy'
 import { methodRouter } from 'prismy-method-router'
-import PostModel from '../../lib/models/Post'
+import { Post, User } from '../../lib/models'
 import { bodySelector } from '../../lib/selectors/bodySelector'
 import {
   sessionSelector,
   sessionMiddleware,
 } from '../../lib/selectors/sessionSelector'
-import User from '../../lib/models/User'
 
 const withErrorHandler = createWithErrorHandler({ dev: true, json: true })
 
@@ -34,7 +33,7 @@ export default methodRouter({
   post: prismy(
     [bodySelector],
     async (body) => {
-      const post = await PostModel.create({
+      const post = await Post.create({
         title: body.title,
         content: body.content,
       })
