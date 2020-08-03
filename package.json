@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "npm run syncDb && next",
     "build": "next build",
+    "start": "next start",
     "syncDb": "ts-node -P tsconfig.node.json scripts/syncDb.ts"
   },
   "dependencies": {
