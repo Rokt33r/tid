@@ -6,7 +6,7 @@ interface UserAttributes {
   id: number
   name: string
   githubToken: string
-  githubId: string
+  githubId: number
 }
 
 interface UserCreationAttributes extends Omit<UserAttributes, 'id'> {}
@@ -20,7 +20,7 @@ class User extends Model<UserAttributes, UserCreationAttributes>
 
   name: string
   githubToken: string
-  githubId: string
+  githubId: number
 
   readonly id: number
   readonly createdAt: Date
@@ -43,7 +43,7 @@ User.init(
       allowNull: true,
     },
     githubId: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       allowNull: true,
     },
   },
