@@ -1,66 +1,72 @@
-import { prismy, res, createWithErrorHandler, querySelector } from 'prismy'
+import { querySelector, redirect } from 'prismy'
 import { methodRouter } from 'prismy-method-router'
-import got from 'got'
-import User from '../../../lib/models/User'
-import {
-  sessionMiddleware,
-  sessionSelector,
-} from '../../../lib/selectors/sessionSelector'
-
-const withErrorHandler = createWithErrorHandler({ dev: true, json: true })
+import { Octokit } from '@octokit/rest'
+import { createOAuthAppAuth } from '@octokit/auth-oauth-app'
+import { TokenAuthentication } from '@octokit/auth-oauth-app/dist-types/types'
+import { p } from '../../../lib/p'
+import { User, GithubUserProfile } from '../../../lib/models'
+import { sessionSelector } from '../../../lib/selectors'
 
 export default methodRouter({
-  get: prismy(
+  get: p(
     [querySelector, sessionSelector],
     async (query, session) => {
       const { code } = query
 
-      const { access_token } = await got(
-        'https://github.com/login/oauth/access_token',
-        {
-          searchParams: {
-            client_id: '28d9036cc07644ae74c3',
-            client_secret: '6856bd87bb2afb9c82eccaf64dfb03e0728ee433',
-            code: code as string,
-          },
-        }
-      ).json()
-
-      const githubUser = await got('https://api.github.com/user', {
-        headers: {
-          Accept: 'application/vnd.github.v3+json',
-          Authorization: `token ${access_token}`,
-        },
-      }).json()
-
-      const { login: userName, id: githubId } = githubUser as any
-
-      let user = await User.findOne({
-        where: {
-          githubId: githubId.toString(),
-        },
+      const auth = createOAuthAppAuth({
+        clientId: process.env.CLIENT_ID,
+        clientSecret: process.env.CLIENT_SECRET,
+        code: code as string
       })
 
-      if (user == null) {
+      const tokenAuthentication = await auth({
+        type: 'token'
+      })
+      const token = (tokenAuthentication as TokenAuthentication).token
+
+      const octokit = new Octokit({
+        auth: token
+      })
+
+      const githubUser = await octokit.users.getAuthenticated()
+      const { login: userName, id: githubId } = githubUser.data
+
+      let githubUserProfile = await GithubUserProfile.findOne({
+        where: {
+          githubId: String(githubId)
+        }
+      })
+      let user: User
+
+      if (githubUserProfile == null) {
         user = await User.create({
-          name: userName,
-          githubId,
-          githubToken: access_token,
+          name: userName
+        })
+        githubUserProfile = await GithubUserProfile.create({
+          githubId: String(githubId),
+          githubToken: token,
+          userId: user.id
         })
       } else {
+        user = await User.findOne({
+          where: {
+            id: githubUserProfile.userId
+          }
+        })
+        githubUserProfile.githubToken = token
         user.name = userName
-        user.githubToken = access_token
-        await user.save()
-      }
-      session.data = {
-        ...session.data,
-        userId: user.id,
       }
 
-      return res({
-        user,
-      })
+      await user.save()
+      await githubUserProfile.save()
+
+      session.data = {
+        ...session.data,
+        userId: user.id
+      }
+
+      return redirect('/')
     },
-    [sessionMiddleware, withErrorHandler]
-  ),
+    []
+  )
 })
