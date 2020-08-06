@@ -5,8 +5,6 @@ import { fixSequelizeModel } from '../db'
 interface UserAttributes {
   id: number
   name: string
-  githubToken: string
-  githubId: string
 }
 
 interface UserCreationAttributes extends Omit<UserAttributes, 'id'> {}
@@ -19,8 +17,6 @@ class User extends Model<UserAttributes, UserCreationAttributes>
   }
 
   name: string
-  githubToken: string
-  githubId: string
 
   readonly id: number
   readonly createdAt: Date
@@ -30,27 +26,19 @@ class User extends Model<UserAttributes, UserCreationAttributes>
 User.init(
   {
     id: {
-      type: DataTypes.INTEGER.UNSIGNED,
+      type: DataTypes.INTEGER,
       autoIncrement: true,
-      primaryKey: true,
+      primaryKey: true
     },
     name: {
       type: DataTypes.STRING,
-      allowNull: false,
-    },
-    githubToken: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
-    githubId: {
-      type: DataTypes.STRING,
-      allowNull: true,
-    },
+      allowNull: false
+    }
   },
   {
     timestamps: true,
-    sequelize, // We need to pass the connection instance
-    modelName: 'User', // We need to choose the model name
+    sequelize,
+    modelName: 'User'
   }
 )
 

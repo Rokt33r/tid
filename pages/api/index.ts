@@ -1,17 +1,11 @@
-import { prismy, res, createWithErrorHandler, redirect } from 'prismy'
+import { res } from 'prismy'
 import { methodRouter } from 'prismy-method-router'
-import PostModel from '../../lib/models/Post'
-import { bodySelector } from '../../lib/selectors/bodySelector'
-import {
-  sessionSelector,
-  sessionMiddleware,
-} from '../../lib/selectors/sessionSelector'
-import User from '../../lib/models/User'
-
-const withErrorHandler = createWithErrorHandler({ dev: true, json: true })
+import { p } from '../../lib/p'
+import { sessionSelector } from '../../lib/selectors/sessionSelector'
+import { User } from '../../lib/models'
 
 export default methodRouter({
-  get: prismy(
+  get: p(
     [sessionSelector],
     async (session) => {
       const { userId } = session.data || {}
@@ -20,27 +14,15 @@ export default methodRouter({
         ? null
         : await User.findOne({
             where: {
-              id: parseInt(userId, 10),
-            },
+              id: parseInt(userId, 10)
+            }
           })
 
       return res({
         message: 'hello',
-        user,
+        user
       })
     },
-    [sessionMiddleware, withErrorHandler]
-  ),
-  post: prismy(
-    [bodySelector],
-    async (body) => {
-      const post = await PostModel.create({
-        title: body.title,
-        content: body.content,
-      })
-
-      return redirect('/api')
-    },
-    [withErrorHandler]
-  ),
+    []
+  )
 })
