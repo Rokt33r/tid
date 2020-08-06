@@ -1,6 +1,6 @@
 import React from 'react'
 import { GetServerSideProps } from 'next'
-import ky from 'ky-universal'
+import got from 'got'
 
 const HomePage = ({ user }: { user: any }) => {
   const oauthUrl = `https://github.com/login/oauth/authorize?client_id=28d9036cc07644ae74c3`
@@ -15,7 +15,7 @@ const HomePage = ({ user }: { user: any }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
-  const user = await ky('http://localhost:3000/api', {
+  const user = await got('http://localhost:3000/api', {
     headers: {
       cookie: context.req.headers.cookie
     }
