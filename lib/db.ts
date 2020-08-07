@@ -8,7 +8,7 @@ export function fixSequelizeModel(newTarget: any, self: Model): void {
       },
       set(value) {
         self.setDataValue(propertyKey, value)
-      },
+      }
     })
   })
 }

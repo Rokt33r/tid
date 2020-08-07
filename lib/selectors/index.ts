@@ -1,2 +1,2 @@
 export { bodySelector } from './bodySelector'
-export { sessionSelector } from './sessionSelector'
+export { sessionSelector, sessionMiddleware } from './sessionSelector'

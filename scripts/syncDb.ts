@@ -1,12 +1,12 @@
-import { Post, User, GithubUserProfile } from '../lib/models'
+import { User, GithubUserProfile, Post } from '../lib/models'
 
-async function run() {
-  await Post.sync()
+async function syncDb() {
   await User.sync()
   await GithubUserProfile.sync()
+  await Post.sync()
 }
 
-run()
+syncDb()
   .then(() => {
     console.log('Synced!')
     process.exit(0)

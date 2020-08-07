@@ -1,6 +1,6 @@
-import Post from './Post'
 import User from './User'
 import GithubUserProfile from './GithubUserProfile'
+import Post from './Post'
 
 User.hasOne(GithubUserProfile)
 GithubUserProfile.belongsTo(User, {
@@ -10,4 +10,4 @@ GithubUserProfile.belongsTo(User, {
   }
 })
 
-export { Post, User, GithubUserProfile }
+export { User, GithubUserProfile, Post }
