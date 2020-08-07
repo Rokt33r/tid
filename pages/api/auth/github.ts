@@ -12,14 +12,14 @@ export const authenticateUser = p(
   async (query, session) => {
     const { code } = query
     const auth = createOAuthAppAuth({
-      clientId: process.env.CLIENT_ID,
-      clientSecret: process.env.CLIENT_SECRET,
+      clientId: process.env.GITHUB_CLIENT_ID,
+      clientSecret: process.env.GITHUB_CLIENT_SECRET,
       code: code as string
     })
-    const tokenAuthentication = await auth({
-      type: 'token'
-    })
+
+    const tokenAuthentication = await auth({ type: 'token' })
     const token = (tokenAuthentication as TokenAuthentication).token
+    console.log(333, token)
     const octokit = new Octokit({ auth: token })
 
     const githubUser = await octokit.users.getAuthenticated()
