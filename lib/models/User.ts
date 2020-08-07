@@ -16,11 +16,11 @@ class User extends Model<UserAttributes, UserCreationAttributes>
     fixSequelizeModel(new.target, this)
   }
 
-  name: string
+  public readonly id!: number
+  public name!: string
 
-  readonly id: number
-  readonly createdAt: Date
-  readonly updatedAt: Date
+  public readonly createdAt!: Date
+  public readonly updatedAt!: Date
 }
 
 User.init(

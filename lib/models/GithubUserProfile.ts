@@ -20,13 +20,13 @@ class GithubUserProfile
     fixSequelizeModel(new.target, this)
   }
 
-  githubToken: string
-  githubId: string
-  userId: number
+  public readonly id!: number
+  public githubToken!: string
+  public githubId!: string
+  public userId!: number
 
-  readonly id: number
-  readonly createdAt: Date
-  readonly updatedAt: Date
+  public readonly createdAt!: Date
+  public readonly updatedAt!: Date
 }
 
 GithubUserProfile.init(
