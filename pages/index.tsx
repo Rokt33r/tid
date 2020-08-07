@@ -7,9 +7,30 @@ const HomePage = ({ user, dayLogs }) => {
   return (
     <div>
       <h1>Hello</h1>
-      <a href={oauthUrl}>Login via Github</a>
+      {!user && <a href={oauthUrl}>Login via Github</a>}
       <hr />
-      <pre>{JSON.stringify(user, null, 2)}</pre>
+      {user && (
+        <form action='/api/dayLogs' method='POST'>
+          <input type='text' name='date' placeholder='20xx-xx-xx' />
+          <input type='text' name='title' placeholder='Title' />
+          <textarea name='content' />
+          <button type='submit'>Submit</button>
+        </form>
+      )}
+      {user && dayLogs && (
+        <section>
+          <h3>DayLogs</h3>
+          <ol>
+            {dayLogs.map((dayLog) => (
+              <li key={`${dayLog.date}-${dayLog.id}`}>
+                <h4>{dayLog.title}</h4>
+                <p>{dayLog.content}</p>
+                <strong>{dayLog.date}</strong>
+              </li>
+            ))}
+          </ol>
+        </section>
+      )}
     </div>
   )
 }
