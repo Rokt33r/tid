@@ -11,7 +11,9 @@
     "sync:db": "ts-node -P tsconfig.node.json scripts/syncDb.ts",
     "sync:db:local": "env-cmd -f .env.local yarn run sync:db",
     "sync:db:test": "env-cmd -f .env.test yarn run sync:db",
-    "test": "env-cmd -f .env.test jest"
+    "test": "yarn run sync:db:test && jest",
+    "migration:generate": "node_modules/.bin/sequelize migration:generate",
+    "migration:run": "node_modules/.bin/sequelize db:migrate"
   },
   "dependencies": {
     "@octokit/auth-oauth-app": "^3.0.5",
@@ -40,6 +42,7 @@
     "env-cmd": "^10.1.0",
     "jest": "^26.4.0",
     "prettier": "^2.0.5",
+    "sequelize-cli": "^6.2.0",
     "ts-node": "^8.10.2",
     "type-fest": "^0.16.0",
     "typescript": "^3.9.7"
