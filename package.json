@@ -7,7 +7,9 @@
     "dev": "yarn run syncDb && next",
     "build": "next build",
     "start": "next start",
-    "syncDb": "ts-node -P tsconfig.node.json scripts/syncDb.ts"
+    "sync:db": "ts-node -P tsconfig.node.json scripts/syncDb.ts",
+    "sync:db:local": "env-cmd -f .env.local yarn run sync:db",
+    "sync:db:test": "env-cmd -f .env.test yarn run sync:db"
   },
   "dependencies": {
     "@octokit/auth-oauth-app": "^3.0.5",
@@ -31,6 +33,7 @@
     "@types/node": "^14.0.24",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
+    "env-cmd": "^10.1.0",
     "prettier": "^2.0.5",
     "ts-node": "^8.10.2",
     "type-fest": "^0.16.0",
