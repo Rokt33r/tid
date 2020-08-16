@@ -4,7 +4,8 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev": "yarn run syncDb && next",
+    "dev:local": "yarn run sync:db:local && next",
+    "dev:test": "yarn run sync:db:test && next",
     "build": "next build",
     "start": "next start",
     "sync:db": "ts-node -P tsconfig.node.json scripts/syncDb.ts",
