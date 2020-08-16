@@ -9,7 +9,8 @@
     "start": "next start",
     "sync:db": "ts-node -P tsconfig.node.json scripts/syncDb.ts",
     "sync:db:local": "env-cmd -f .env.local yarn run sync:db",
-    "sync:db:test": "env-cmd -f .env.test yarn run sync:db"
+    "sync:db:test": "env-cmd -f .env.test yarn run sync:db",
+    "test": "jest"
   },
   "dependencies": {
     "@octokit/auth-oauth-app": "^3.0.5",
@@ -30,10 +31,13 @@
     "sequelize": "^6.3.3"
   },
   "devDependencies": {
+    "@types/jest": "^26.0.10",
     "@types/node": "^14.0.24",
     "@types/react": "^16.9.43",
     "@types/react-dom": "^16.9.8",
+    "babel-jest": "^26.3.0",
     "env-cmd": "^10.1.0",
+    "jest": "^26.4.0",
     "prettier": "^2.0.5",
     "ts-node": "^8.10.2",
     "type-fest": "^0.16.0",
