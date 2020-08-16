@@ -11,7 +11,7 @@
     "sync:db": "ts-node -P tsconfig.node.json scripts/syncDb.ts",
     "sync:db:local": "env-cmd -f .env.local yarn run sync:db",
     "sync:db:test": "env-cmd -f .env.test yarn run sync:db",
-    "test": "jest"
+    "test": "env-cmd -f .env.test jest"
   },
   "dependencies": {
     "@octokit/auth-oauth-app": "^3.0.5",
