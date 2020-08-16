@@ -5,7 +5,7 @@ export default {
   },
   db: {
     name: process.env.DB_NAME,
-    password: process.env.DB_PASSWORD,
+    password: process.env.DB_PASSWORD || '',
     username: process.env.DB_USERNAME,
     host: process.env.DB_HOST
   }
