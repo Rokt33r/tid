@@ -1,4 +1,4 @@
-import { redirect } from 'prismy'
+import { res } from 'prismy'
 import { methodRouter } from 'prismy-method-router'
 import { p } from '../../../lib/p'
 import { bodySelector, authenticatedUserSelector } from '../../../lib/selectors'
@@ -11,6 +11,7 @@ export const createDayLog = p(
     if (user == null) {
       throw createError(401, 'Unauthorized user')
     }
+
     const { date, title, content } = body
     const dayLog = await DayLog.create({
       date,
@@ -19,7 +20,7 @@ export const createDayLog = p(
       userId: user.id
     })
 
-    return redirect('/')
+    return res({ dayLog })
   }
 )
 
