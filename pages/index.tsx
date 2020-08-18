@@ -38,7 +38,7 @@ const HomePage = ({ user, dayLogs }) => {
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const { user, dayLogs } = await got('http://localhost:3000/api', {
+  const { user, dayLogs } = await got(`${config.baseUrl}/api`, {
     headers: {
       cookie: ctx.req.headers.cookie
     }

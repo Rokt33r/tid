@@ -4,7 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "dev:local": "yarn run sync:db:local && next",
+    "dev:local": "env-cmd -f .env.local next",
     "dev:test": "yarn run sync:db:test && next",
     "build": "next build",
     "start": "next start",
@@ -13,7 +13,9 @@
     "sync:db:test": "env-cmd -f .env.test yarn run sync:db",
     "test": "yarn run sync:db:test && jest",
     "migration:generate": "node_modules/.bin/sequelize migration:generate",
-    "migration:run": "node_modules/.bin/sequelize db:migrate"
+    "migration:run": "node_modules/.bin/sequelize db:migrate",
+    "migration:run:local": "env-cmd -f .env.local yarn run migration:run",
+    "migration:run:production": "env-cmd -f .env.production yarn run migration:run"
   },
   "dependencies": {
     "@octokit/auth-oauth-app": "^3.0.5",

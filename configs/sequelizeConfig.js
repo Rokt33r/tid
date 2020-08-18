@@ -9,24 +9,27 @@ const config = {
 
 module.exports = {
   development: {
-    name: config.db.name,
+    database: config.db.name,
     password: config.db.password,
     username: config.db.username,
     host: config.db.host,
+    port: 5432,
     dialect: 'postgres'
   },
   production: {
-    name: config.db.name,
+    database: config.db.name,
     password: config.db.password,
     username: config.db.username,
     host: config.db.host,
+    port: 5432,
     dialect: 'postgres'
   },
   test: {
-    name: config.db.name,
+    database: config.db.name,
     password: config.db.password,
     username: config.db.username,
     host: config.db.host,
+    port: 5432,
     dialect: 'postgres'
   }
 }

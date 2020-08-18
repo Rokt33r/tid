@@ -20,7 +20,7 @@ export const authenticateUser = p(
 
     const tokenAuthentication = await auth({ type: 'token' })
     const token = (tokenAuthentication as TokenAuthentication).token
-    console.log(333, token)
+
     const octokit = new Octokit({ auth: token })
 
     const githubUser = await octokit.users.getAuthenticated()

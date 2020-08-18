@@ -8,5 +8,6 @@ export default {
     password: process.env.DB_PASSWORD || '',
     username: process.env.DB_USERNAME,
     host: process.env.DB_HOST
-  }
+  },
+  baseUrl: 'https://tid-one.vercel.app'
 }
