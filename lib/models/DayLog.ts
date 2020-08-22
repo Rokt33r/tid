@@ -1,4 +1,4 @@
-import { DataTypes, Model, Optional } from 'sequelize'
+import { DataTypes, Model } from 'sequelize'
 import sequelize from '../sequelize'
 import { fixSequelizeModel } from '../db'
 
@@ -56,7 +56,8 @@ DayLog.init(
   {
     timestamps: true,
     sequelize,
-    modelName: 'DayLog'
+    modelName: 'DayLog',
+    freezeTableName: true
   }
 )
 

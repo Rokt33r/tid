@@ -52,7 +52,8 @@ GithubUserProfile.init(
   {
     timestamps: true,
     sequelize,
-    modelName: 'GithubUserProfile'
+    modelName: 'GithubUserProfile',
+    freezeTableName: true
   }
 )
 

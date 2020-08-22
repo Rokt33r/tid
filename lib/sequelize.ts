@@ -1,11 +1,12 @@
 import { Sequelize } from 'sequelize'
+import config from '../configs/config'
 
 const sequelize = new Sequelize(
-  process.env.DB_NAME || 'tid',
-  process.env.DB_USERNAME || 'root',
-  '',
+  config.db.name,
+  config.db.username,
+  config.db.password,
   {
-    host: process.env.DB_HOST || 'localhost',
+    host: config.db.host,
     dialect: 'postgres',
     logging: false
   }

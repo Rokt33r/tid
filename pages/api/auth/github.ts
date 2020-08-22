@@ -3,6 +3,7 @@ import { methodRouter } from 'prismy-method-router'
 import { Octokit } from '@octokit/rest'
 import { createOAuthAppAuth } from '@octokit/auth-oauth-app'
 import { TokenAuthentication } from '@octokit/auth-oauth-app/dist-types/types'
+import config from '../../../configs/config'
 import { p } from '../../../lib/p'
 import { User, GithubUserProfile } from '../../../lib/models'
 import { sessionSelector } from '../../../lib/selectors'
@@ -12,14 +13,14 @@ export const authenticateUser = p(
   async (query, session) => {
     const { code } = query
     const auth = createOAuthAppAuth({
-      clientId: process.env.GITHUB_CLIENT_ID,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET,
+      clientId: config.github.clientId,
+      clientSecret: config.github.clientSecret,
       code: code as string
     })
 
     const tokenAuthentication = await auth({ type: 'token' })
     const token = (tokenAuthentication as TokenAuthentication).token
-    console.log(333, token)
+
     const octokit = new Octokit({ auth: token })
 
     const githubUser = await octokit.users.getAuthenticated()
