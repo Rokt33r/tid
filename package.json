@@ -12,7 +12,7 @@
   "dependencies": {
     "@octokit/auth-oauth-app": "^3.0.5",
     "@octokit/rest": "^18.0.3",
-    "got": "^11.5.1",
+    "got": "^11.8.5",
     "ky": "^0.23.0",
     "micro": "^9.3.4",
     "next": "^9.4.4",
